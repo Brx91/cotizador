@@ -1,0 +1,377 @@
+/* SISTEMA DE COTIZACIÓN ARCEN ABERTURAS - ESTILOS FULL
+  Diseño: Panel Premium, Sticky Result, Tabla Detallada e Impresión Profesional
+*/
+
+:root {
+    --primary: #1a1a1a;       /* Negro Mate Premium */
+    --accent: #007bff;        /* Azul Oracle Eléctrico */
+    --success: #28a745;       /* Verde Confirmación */
+    --bg: #f4f7f6;            /* Gris Claro de Fondo */
+    --text: #333;             /* Texto Principal */
+    --border: #e1e4e8;        /* Bordes Suaves */
+}
+
+/* 1. Reset General */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    line-height: 1.5;
+}
+
+.admin-container {
+    max-width: 1100px; /* Ancho ideal para el Layout de 2 columnas */
+    margin: 0 auto;
+}
+
+/* 2. Encabezado */
+.admin-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-header h1 {
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: var(--primary);
+}
+
+.admin-header h1 span {
+    color: var(--accent);
+}
+
+.admin-header p {
+    color: #666;
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+/* 3. Layout Principal (Grilla) */
+.layout-principal {
+    display: grid;
+    grid-template-columns: 1fr 350px; /* Columna Formulario | Columna Resultado */
+    gap: 20px;
+    align-items: start; /* Importante para el Sticky */
+}
+
+/* 4. Tarjetas Base (Cards) */
+.cotizador-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Sombra suave */
+}
+
+/* 5. Formulario de Cotización */
+.cotiz-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input[type="number"], 
+select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+
+input[type="number"]:focus, 
+select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    outline: none;
+}
+
+/* Checkbox Umbral */
+#opciones-puerta {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+#opciones-puerta label {
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+/* 6. Botones Generales */
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+/* 7. Columna Derecha: Resultado Sticky */
+.sticky-result {
+    position: sticky;
+    top: 20px; /* Se queda pegado a 20px del techo */
+}
+
+.result-card {
+    background: var(--primary); /* Fondo Negro Mate */
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.badge {
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 15px;
+    font-size: 1rem;
+    color: #aaa;
+}
+
+.price-row strong {
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+/* Fila del Total */
+.total-row {
+    color: white;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.total-row span {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.total-row strong {
+    font-size: 2.5rem; /* Precio Grande */
+    color: #fff;
+    font-weight: 800;
+}
+
+#res-detalle-text {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Botón Añadir a Presupuesto */
+.btn-add {
+    background: var(--success);
+    color: white;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    padding: 15px;
+}
+
+.btn-add:hover {
+    background: #218838;
+}
+
+/* 8. Sección Tabla de Presupuesto (Se mantiene hermoso) */
+.encabezado-tabla {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+}
+
+.encabezado-tabla h3 {
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+/* Botón Imprimir Estilizado (Gris Oscuro) */
+.btn-print {
+    background: #343a40; /* Gris Oscuro Premium */
+    color: white;
+    font-size: 0.8rem;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio para el emoji */
+}
+
+.btn-print:hover {
+    background: #23272b;
+}
+
+/* Emoji de impresora antes del texto */
+.btn-print::before {
+    content: '🖨️';
+    font-size: 1rem;
+}
+
+/* Diseño de la Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    text-align: left;
+    padding: 12px;
+    background: #f8f9fa;
+    color: #666;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+/* Botón Eliminar de la tabla */
+td button {
+    background: none;
+    color: #dc3545; /* Rojo Peligro */
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1px solid transparent;
+}
+
+td button:hover {
+    background: #fff5f5;
+    border-color: #dc3545;
+    border-radius: 4px;
+}
+
+/* Caja de Total Final */
+.total-final-box {
+    background: var(--primary);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: right;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.total-final-box span {
+    color: #fff;
+}
+
+/* 9. Media Queries (Responsividad) */
+@media (max-width: 850px) {
+    .layout-principal {
+        grid-template-columns: 1fr; /* Una columna en móvil */
+    }
+    
+    .sticky-result {
+        position: relative; /* Pierde el Sticky en móvil para no tapar */
+        top: 0;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .cotiz-row {
+        flex-direction: column; /* Inputs apilados */
+        gap: 10px;
+    }
+}
+
+/* 10. Estilos de Impresión Profesional */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+        color: black;
+    }
+    
+    .no-print {
+        display: none !important; /* Oculta cotizador y botones */
+    }
+    
+    .admin-container {
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .cotizador-card {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+    }
+    
+    h3 {
+        color: black;
+        border: none;
+    }
+    
+    table {
+        border: 1px solid #eee;
+    }
+    
+    th {
+        background: #eee !important;
+        color: black;
+        -webkit-print-color-adjust: exact; /* Fuerza fondo gris en PDF */
+    }
+    
+    td {
+        border-bottom: 1px solid #eee;
+    }
+    
+    .total-final-box {
+        background: black !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact; /* Fuerza fondo negro en PDF */
+        margin-top: 30px;
+    }
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcen Aberturas - Panel Profesional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cotizador-style.css">
+</head>
+<body>
+
+    <div class="admin-container">
+        <header class="admin-header no-print">
+            <h1>Arcen<span>Aberturas</span></h1>
+            <p>Sistema de Gestión Arcen - Línea Módena</p>
+        </header>
+
+        <div class="layout-principal">
+            <main class="cotizador-card no-print">
+                <div class="cotiz-row">
+                    <div class="input-group">
+                        <label>Ancho (mm)</label>
+                        <input type="number" id="ancho" placeholder="800">
+                    </div>
+                    <div class="input-group">
+                        <label>Alto (mm)</label>
+                        <input type="number" id="alto" placeholder="2000">
+                    </div>
+                </div>
+
+                <div class="cotiz-row">
+                    <div class="input-group">
+                        <label>Tipología</label>
+                        <select id="tipo">
+                            <option value="corrediza">Corrediza 2H</option>
+                            <option value="puerta">Puerta Pesada 1H</option>
+                            <option value="puertaDoble">Puerta Doble (2H)</option>
+                            <option value="ventanaAbrir">Ventana de Abrir 1H</option>
+                            <option value="ventanaAbrirDoble">Ventana de Abrir 2H</option>
+                            <option value="oscilo">Oscilobatiente</option>
+                            <option value="banderola">Banderola</option>
+                            <option value="porton">Portón (3 Hojas)</option>
+                            <option value="panoFijo">Paño Fijo</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Cantidad</label>
+                        <input type="number" id="cantidad" value="1" min="1">
+                    </div>
+                </div>
+
+                <div class="cotiz-row">
+                    <div class="input-group">
+                        <label>Vidrio</label>
+                        <select id="vidrio">
+                            <option value="simple3">Simple 3mm</option>
+                            <option value="simple4">Simple 4mm</option>
+                            <option value="lam33">Laminado 3+3</option>
+                            <option value="dvh">DVH (4/12/4)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Color</label>
+                        <select id="color">
+                            <option value="blanco">Blanco</option>
+                            <option value="negro">Negro (+15%)</option>
+                            <option value="anodizado">Anodizado Natural (+22%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="opciones-puerta" style="display:none; margin-top: 10px;">
+                    <label style="cursor:pointer; display:flex; align-items:center; gap:10px;">
+                        <input type="checkbox" id="umbral"> ¿Lleva Umbral?
+                    </label>
+                </div>
+            </main>
+
+            <aside class="sticky-result no-print">
+                <div class="result-card">
+                    <span class="badge">VISTA PREVIA</span>
+                    <div class="price-row">
+                        <span>Precio Unitario:</span>
+                        <strong id="res-unitario">$ 0</strong>
+                    </div>
+                    <div class="price-row total-row">
+                        <span>Total (x<span id="res-cant-label">1</span>):</span>
+                        <strong id="res-total">$ 0</strong>
+                    </div>
+                    <p id="res-detalle-text">Esperando medidas...</p>
+                    <button id="confirmar-agregar" class="btn-add">AÑADIR AL PRESUPUESTO</button>
+                </div>
+            </aside>
+        </div>
+
+        <section id="contenedor-lista" style="display:none; margin-top: 30px;">
+            <div class="cotizador-card">
+                <div class="encabezado-tabla">
+                    <h3>Presupuesto Final</h3>
+                    <button onclick="window.print()" class="no-print btn-print">IMPRIMIR PDF</button>
+                </div>
+                <table id="tabla-presupuesto">
+                    <thead>
+                        <tr>
+                            <th>Cant.</th>
+                            <th>Descripción</th>
+                            <th>Medidas</th>
+                            <th>Subtotal</th>
+                            <th class="no-print"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla"></tbody>
+                </table>
+                <div class="total-final-box">
+                    TOTAL GENERAL: <span id="total-presupuesto-final">$ 0</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="cotizador-logic.js"></script>
+</body>
+</html>

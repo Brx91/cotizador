@@ -1,9 +1,3 @@
-/**
- * ARCEN ABERTURAS - LOGIC FULL V6 (Final Fix)
- * Sistema unificado: Hojas múltiples, Anodizado y Vidrio 3mm.
- */
-
-// Pesos de perfiles por metro lineal (kg/m)
 const CATALOGO = {
     puerta: { marco: {p: 0.728}, hoja: {p: 1.088}, contra: {p: 0.206}, zocaloA: {p: 1.262}, inversor: {p: 0.650} },
     corrediza: { umbral: {p: 1.333}, jamba: {p: 0.680}, lateral: {p: 0.711}, central: {p: 0.633}, zocalo: {p: 0.707} },
@@ -11,7 +5,6 @@ const CATALOGO = {
     panoFijo: { marco: {p: 0.728}, contra: {p: 0.206} }
 };
 
-// Precios de insumos y accesorios (Actualizados)
 const PRECIOS = {
     kiloBase: 12800, 
     vidrio: { simple3: 8150, simple4: 9950, lam33: 30880, dvh: 0 },
@@ -27,9 +20,6 @@ const PRECIOS_DVH = { varilla: 1200, escuadra: 350, tamiz: 6750, salchicha: 1500
 let listaPresupuesto = [];
 let ultimaCotizacion = null;
 
-/**
- * Función que realiza el cálculo técnico
- */
 function calcularAutomatico() {
     const d = {
         tipo: document.getElementById('tipo').value,
@@ -41,133 +31,72 @@ function calcularAutomatico() {
         umbral: document.getElementById('umbral').checked
     };
 
-    // Mostrar opción umbral solo si la palabra "puerta" o "porton" está en el tipo
     document.getElementById('opciones-puerta').style.display = (d.tipo.toLowerCase().includes('puerta') || d.tipo === 'porton') ? 'block' : 'none';
 
-    if (!d.ancho || !d.alto) {
-        document.getElementById('res-unitario').innerText = "$ 0";
-        document.getElementById('res-total').innerText = "$ 0";
-        return;
-    }
+    if (!d.ancho || !d.alto) return;
 
-    const aM = d.ancho / 1000; 
-    const hM = d.alto / 1000; 
-    const m2 = aM * hM;
+    const aM = d.ancho / 1000; const hM = d.alto / 1000; const m2 = aM * hM;
     let kg = 0, acc = 0, cantH = 1;
 
-    // --- LOGICA DE CARPINTERIA ---
     if (d.tipo === 'panoFijo') {
-        kg = ((aM * 2) + (hM * 2)) * (CATALOGO.panoFijo.marco.p + CATALOGO.panoFijo.contra.p);
+        kg = ((aM*2)+(hM*2)) * (CATALOGO.panoFijo.marco.p + CATALOGO.panoFijo.contra.p);
         acc = PRECIOS.puerta.escuadra * 4;
     } 
     else if (d.tipo === 'puerta' || d.tipo === 'puertaDoble') {
         cantH = (d.tipo === 'puertaDoble') ? 2 : 1;
-        const P = CATALOGO.puerta;
-        // Marco + Hojas + Zócalo Alto
-        kg = ((hM * 2) + (aM * (d.umbral ? 2 : 1))) * P.marco.p + (hM * 2 * cantH + aM * cantH) * P.hoja.p + (aM * P.zocaloA.p);
-        if (cantH === 2) kg += hM * P.inversor.p; // Agregar perfil inversor
-        // Accesorios: Cerradura, picaporte, 3 bisagras por hoja y pasadores si es doble
-        acc = PRECIOS.puerta.cerradura + PRECIOS.puerta.picaporte + (PRECIOS.puerta.bisagra * 3 * cantH) + (cantH > 1 ? PRECIOS.puerta.t98 * 2 : 0);
+        kg = ((hM*2)+(aM*(d.umbral?2:1)))*CATALOGO.puerta.marco.p + (hM*2*cantH + aM*cantH)*CATALOGO.puerta.hoja.p + (aM*CATALOGO.puerta.zocaloA.p);
+        if (cantH === 2) kg += hM * CATALOGO.puerta.inversor.p;
+        acc = PRECIOS.puerta.cerradura + PRECIOS.puerta.picaporte + (PRECIOS.puerta.bisagra*3*cantH) + (cantH > 1 ? PRECIOS.puerta.t98 * 2 : 0);
     }
     else if (d.tipo === 'ventanaAbrir' || d.tipo === 'ventanaAbrirDoble' || d.tipo === 'oscilo' || d.tipo === 'banderola') {
         cantH = (d.tipo === 'ventanaAbrirDoble') ? 2 : 1;
-        const V = CATALOGO.ventanaAbrir;
-        kg = ((aM * 2) + (hM * 2)) * V.marco.p + (hM * 2 * cantH + aM * 2 * cantH) * (V.hoja.p + V.contra.p);
-        if (cantH === 2) kg += hM * V.inversor.p;
-        
+        kg = ((aM*2)+(hM*2))*CATALOGO.ventanaAbrir.marco.p + (hM*2*cantH + aM*2*cantH)*(CATALOGO.ventanaAbrir.hoja.p + CATALOGO.ventanaAbrir.contra.p);
+        if (cantH === 2) kg += hM * CATALOGO.ventanaAbrir.inversor.p;
         if (d.tipo === 'oscilo') acc = PRECIOS.kitOscilo;
-        else if (d.tipo === 'banderola') acc = (PRECIOS.puerta.bisagra * 2) + PRECIOS.banderola.chingolo + PRECIOS.banderola.reten;
+        else if (d.tipo === 'banderola') acc = (PRECIOS.puerta.bisagra*2) + PRECIOS.banderola.chingolo + PRECIOS.banderola.reten;
         else acc = PRECIOS.kitAbrir * cantH;
     }
     else if (d.tipo === 'porton') {
         cantH = 3;
-        const P = CATALOGO.puerta;
-        kg = ((hM * 2) + (aM * 2)) * P.marco.p + (hM * 2 * cantH + aM * cantH) * P.hoja.p + (aM * P.zocaloA.p) + (hM * 2 * P.inversor.p);
-        acc = PRECIOS.puerta.cerradura + PRECIOS.puerta.picaporte + (PRECIOS.puerta.bisagra * 3 * cantH) + (PRECIOS.puerta.t98 * 4);
+        kg = ((hM*2)+(aM*2))*CATALOGO.puerta.marco.p + (hM*2*cantH + aM*cantH)*CATALOGO.puerta.hoja.p + (aM*CATALOGO.puerta.zocaloA.p) + (hM*2*CATALOGO.puerta.inversor.p);
+        acc = PRECIOS.puerta.cerradura + PRECIOS.puerta.picaporte + (PRECIOS.puerta.bisagra*3*cantH) + (PRECIOS.puerta.t98 * 4);
     }
     else if (d.tipo === 'corrediza') {
-        const C = CATALOGO.corrediza;
-        kg = (aM * 2 * C.umbral.p) + (hM * 2 * C.jamba.p) + (hM * 2 * (C.lateral.p + C.central.p)) + (aM * 2 * C.zocalo.p);
-        acc = (PRECIOS.corrediza.rueda * 2 * (d.ancho > 1800 ? 2 : 1)) + PRECIOS.corrediza.cierre;
+        kg = (aM*2*CATALOGO.corrediza.umbral.p) + (hM*2*CATALOGO.corrediza.jamba.p) + (hM*2*(CATALOGO.corrediza.lateral.p+CATALOGO.corrediza.central.p)) + (aM*2*CATALOGO.corrediza.zocalo.p);
+        acc = (PRECIOS.corrediza.rueda*2 * (d.ancho > 1800 ? 2 : 1)) + PRECIOS.corrediza.cierre;
     }
 
-    // --- LOGICA DE VIDRIO ---
-    let costoVid = 0;
+    let cVid = 0;
     if (d.vidrio === 'dvh') {
-        const perimetroTotal = ((aM / cantH * 2) + (hM * 2)) * cantH;
-        costoVid = (m2 * 9950 * 2) + (perimetroTotal * PRECIOS_DVH.varilla) + (cantH * 4 * PRECIOS_DVH.escuadra) + (perimetroTotal * PRECIOS_DVH.tamizM * PRECIOS_DVH.tamiz) + ((perimetroTotal / PRECIOS_DVH.rendS) * PRECIOS_DVH.salchicha);
-    } else {
-        costoVid = m2 * PRECIOS.vidrio[d.vidrio];
-    }
+        const pTotal = ((aM/cantH*2)+(hM*2))*cantH;
+        cVid = (m2*9950*2) + (pTotal*PRECIOS_DVH.varilla) + (cantH*4*PRECIOS_DVH.escuadra) + (pTotal*PRECIOS_DVH.tamizM*PRECIOS_DVH.tamiz) + ((pTotal/PRECIOS_DVH.rendS)*PRECIOS_DVH.salchicha);
+    } else { cVid = m2 * PRECIOS.vidrio[d.vidrio]; }
 
-    // --- AJUSTES FINALES Y MARGENES ---
-    let costoAlu = (kg * 1.05) * PRECIOS.kiloBase;
-    if (d.color === 'negro') costoAlu *= 1.15;
-    if (d.color === 'anodizado') costoAlu *= 1.22;
+    let cAlu = (kg * 1.05) * PRECIOS.kiloBase;
+    if (d.color === 'negro') cAlu *= 1.15;
+    if (d.color === 'anodizado') cAlu *= 1.22;
 
-    const precioVentaAlu = (costoAlu + acc + ((aM * 2 + hM * 2) * PRECIOS.insumosM)) * 1.1025 * 1.45 * 1.21;
-    const precioVentaVid = (costoVid * 2) * 1.21;
-    
-    const finalUnitario = precioVentaAlu + precioVentaVid;
-    const finalTotal = finalUnitario * d.cantidad;
+    const vAlu = (cAlu + acc + ((aM*2+hM*2)*PRECIOS.insumosM)) * 1.1025 * 1.45 * 1.21;
+    const vVid = (cVid * 2) * 1.21;
+    const finalUnit = vAlu + vVid;
 
-    // Actualizar Interfaz
-    document.getElementById('res-unitario').innerText = `$ ${Math.round(finalUnitario).toLocaleString('es-AR')}`;
-    document.getElementById('res-total').innerText = `$ ${Math.round(finalTotal).toLocaleString('es-AR')}`;
+    document.getElementById('res-unitario').innerText = `$ ${Math.round(finalUnit).toLocaleString('es-AR')}`;
+    document.getElementById('res-total').innerText = `$ ${Math.round(finalUnit * d.cantidad).toLocaleString('es-AR')}`;
     document.getElementById('res-cant-label').innerText = d.cantidad;
     document.getElementById('res-detalle-text').innerText = `${d.tipo.toUpperCase()} - ${d.ancho}x${d.alto}mm`;
 
-    let umbTxt = d.tipo.toLowerCase().includes('puerta') ? (d.umbral ? " c/ Umbral" : " s/ Umbral") : "";
     ultimaCotizacion = {
-        desc: `${d.tipo.toUpperCase()} (${d.vidrio.toUpperCase()})${umbTxt}`,
+        desc: `${d.tipo.toUpperCase()} (${d.vidrio.toUpperCase()})${d.tipo.toLowerCase().includes('puerta') ? (d.umbral ? " c/ Umbral" : " s/ Umbral") : ""}`,
         medidas: `${d.ancho}x${d.alto}`,
         cant: d.cantidad,
-        subtotal: Math.round(finalTotal)
+        subtotal: Math.round(finalUnit * d.cantidad)
     };
 }
 
-/**
- * Gestión del Presupuesto
- */
-function actualizarTabla() {
-    const tbody = document.getElementById('cuerpo-tabla');
-    tbody.innerHTML = '';
-    let totalObra = 0;
-
-    listaPresupuesto.forEach((it, i) => {
-        totalObra += it.subtotal;
-        tbody.innerHTML += `
-            <tr>
-                <td><b>${it.cant}</b></td>
-                <td>${it.desc}</td>
-                <td>${it.medidas}</td>
-                <td>$ ${it.subtotal.toLocaleString('es-AR')}</td>
-                <td class="no-print">
-                    <button onclick="eliminarItem(${i})" style="color:#dc3545; background:none; border:none; cursor:pointer; font-weight:bold;">ELIMINAR</button>
-                </td>
-            </tr>`;
-    });
-
-    document.getElementById('total-presupuesto-final').innerText = `$ ${totalObra.toLocaleString('es-AR')}`;
-    document.getElementById('contenedor-lista').style.display = (listaPresupuesto.length > 0) ? 'block' : 'none';
-}
-
-function eliminarItem(index) {
-    listaPresupuesto.splice(index, 1);
-    actualizarTabla();
-}
-
-/**
- * Inicialización
- */
 window.onload = () => {
-    const inputs = ['ancho', 'alto', 'cantidad', 'tipo', 'vidrio', 'color', 'umbral'];
-    inputs.forEach(id => {
+    ['ancho', 'alto', 'cantidad', 'tipo', 'vidrio', 'color', 'umbral'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('input', calcularAutomatico);
-            el.addEventListener('change', calcularAutomatico);
-        }
+        if (el) el.addEventListener('input', calcularAutomatico);
     });
 
     document.getElementById('confirmar-agregar').onclick = () => {
@@ -176,3 +105,16 @@ window.onload = () => {
         actualizarTabla();
     };
 };
+
+function actualizarTabla() {
+    const tbody = document.getElementById('cuerpo-tabla');
+    tbody.innerHTML = ''; let total = 0;
+    listaPresupuesto.forEach((it, i) => {
+        total += it.subtotal;
+        tbody.innerHTML += `<tr><td><b>${it.cant}</b></td><td>${it.desc}</td><td>${it.medidas}</td><td>$ ${it.subtotal.toLocaleString('es-AR')}</td><td class="no-print"><button onclick="eliminarItem(${i})" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">ELIMINAR</button></td></tr>`;
+    });
+    document.getElementById('total-presupuesto-final').innerText = `$ ${total.toLocaleString('es-AR')}`;
+    document.getElementById('contenedor-lista').style.display = 'block';
+}
+
+function eliminarItem(i) { listaPresupuesto.splice(i, 1); actualizarTabla(); }

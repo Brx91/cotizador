@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcen Aberturas - Panel Profesional</title>
+    <title>Arcen Aberturas - Sistema de Gestión</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="cotizador-style.css">
 </head>
@@ -11,8 +11,9 @@
 
     <div class="admin-container">
         <header class="admin-header no-print">
+            <img src="logo.png" alt="Arcen Logo" onerror="this.style.display='none'">
             <h1>Arcen<span>Aberturas</span></h1>
-            <p>Sistema de Gestión Arcen - Línea Módena</p>
+            <p>Sistema de Gestión Profesional - Línea Módena</p>
         </header>
 
         <div class="layout-principal">
@@ -87,7 +88,7 @@
                         <span>Total (x<span id="res-cant-label">1</span>):</span>
                         <strong id="res-total">$ 0</strong>
                     </div>
-                    <p id="res-detalle-text">Esperando medidas...</p>
+                    <p id="res-detalle-text">Ingresá medidas para calcular</p>
                     <button id="confirmar-agregar" class="btn-add">AÑADIR AL PRESUPUESTO</button>
                 </div>
             </aside>
@@ -95,22 +96,38 @@
 
         <section id="contenedor-lista" style="display:none; margin-top: 30px;">
             <div class="cotizador-card">
-                <div class="encabezado-tabla">
-                    <h3>Presupuesto Final</h3>
-                    <button onclick="window.print()" class="no-print btn-print">IMPRIMIR PDF</button>
+                
+                <div class="header-presupuesto">
+                    <div class="logo-presupuesto">
+                        <img src="logo.png" alt="Logo Arcen" onerror="this.style.display='none'">
+                    </div>
+                    <div class="datos-empresa">
+                        <strong>ARCEN ABERTURAS</strong><br>
+                        Carpintería de Aluminio de Alta Prestación<br>
+                        Mar del Plata, Argentina
+                    </div>
                 </div>
-                <table id="tabla-presupuesto">
-                    <thead>
-                        <tr>
-                            <th>Cant.</th>
-                            <th>Descripción</th>
-                            <th>Medidas</th>
-                            <th>Subtotal</th>
-                            <th class="no-print"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpo-tabla"></tbody>
-                </table>
+
+                <div class="encabezado-tabla">
+                    <h3>Detalle del Presupuesto</h3>
+                    <button onclick="window.print()" class="no-print btn-print">IMPRIMIR</button>
+                </div>
+                
+                <div class="table-responsive">
+                    <table id="tabla-presupuesto">
+                        <thead>
+                            <tr>
+                                <th>Cant.</th>
+                                <th>Descripción</th>
+                                <th>Medidas</th>
+                                <th>Subtotal</th>
+                                <th class="no-print">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpo-tabla"></tbody>
+                    </table>
+                </div>
+
                 <div class="total-final-box">
                     TOTAL GENERAL: <span id="total-presupuesto-final">$ 0</span>
                 </div>
